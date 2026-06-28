@@ -1,0 +1,24 @@
+## .NET / ASP.NET Core
+
+# Build output
+bin/
+obj/
+out/
+
+# SQLite database files (created at runtime)
+*.db
+*.db-shm
+*.db-wal
+
+# User-specific / IDE
+*.user
+*.suo
+.vs/
+.idea/
+.vscode/
+
+# Rider
+*.sln.iml
+
+# Local editor artifacts
+.claude/
