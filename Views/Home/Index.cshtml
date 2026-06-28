@@ -1,0 +1,86 @@
+@model BookShelf_MVC.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">📚 My Reading Dashboard</h1>
+    <a class="btn btn-primary" asp-controller="Books" asp-action="Create">+ Add Book</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-primary">@Model.TotalBooks</div>
+                <div class="text-muted small">Total Books</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-success">@Model.FinishedCount</div>
+                <div class="text-muted small">Finished</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-warning">@Model.PagesRead.ToString("N0")</div>
+                <div class="text-muted small">Pages Read</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center shadow-sm h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-info">@Model.AverageRating</div>
+                <div class="text-muted small">Avg Rating</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">Books by Status</div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <canvas id="statusChart"
+                        data-wanttoread="@Model.WantToReadCount"
+                        data-reading="@Model.ReadingCount"
+                        data-finished="@Model.FinishedCount"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-semibold">Recently Added</div>
+            <ul class="list-group list-group-flush">
+                @if (!Model.RecentBooks.Any())
+                {
+                    <li class="list-group-item text-muted">No books yet — add your first one!</li>
+                }
+                @foreach (var book in Model.RecentBooks)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id"
+                               class="fw-semibold text-decoration-none">@book.Title</a>
+                            <div class="small text-muted">@book.Author</div>
+                        </div>
+                        <span class="badge bg-secondary">@book.Genre</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+}
