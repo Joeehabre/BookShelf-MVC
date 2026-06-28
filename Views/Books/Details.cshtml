@@ -1,0 +1,45 @@
+@model BookShelf_MVC.Models.Book
+@using BookShelf_MVC.Models
+@{
+    ViewData["Title"] = Model.Title;
+    string label = Model.Status switch
+    {
+        ReadingStatus.Finished => "Finished",
+        ReadingStatus.Reading  => "Reading",
+        _                      => "Want to Read"
+    };
+}
+
+<div class="card shadow-sm" style="max-width: 640px;">
+    <div class="card-body">
+        <h1 class="h4 card-title mb-1">@Model.Title</h1>
+        <h2 class="h6 text-muted mb-3">by @Model.Author</h2>
+
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Genre</dt>
+            <dd class="col-sm-9">@(string.IsNullOrWhiteSpace(Model.Genre) ? "—" : Model.Genre)</dd>
+
+            <dt class="col-sm-3">Pages</dt>
+            <dd class="col-sm-9">@Model.Pages.ToString("N0")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@label</dd>
+
+            <dt class="col-sm-3">Rating</dt>
+            <dd class="col-sm-9">@(Model.Rating > 0 ? new string('★', Model.Rating) + new string('☆', 5 - Model.Rating) : "Not rated")</dd>
+
+            <dt class="col-sm-3">Date Added</dt>
+            <dd class="col-sm-9">@Model.DateAdded.ToString("MMM d, yyyy")</dd>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Notes))
+            {
+                <dt class="col-sm-3">Notes</dt>
+                <dd class="col-sm-9">@Model.Notes</dd>
+            }
+        </dl>
+    </div>
+    <div class="card-footer bg-transparent">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a asp-action="Index" class="btn btn-sm btn-link">Back to list</a>
+    </div>
+</div>

@@ -1,0 +1,93 @@
+@model IEnumerable<BookShelf_MVC.Models.Book>
+@using BookShelf_MVC.Models
+@{
+    ViewData["Title"] = "My Books";
+    var currentStatus = ViewData["Status"] as ReadingStatus?;
+}
+
+@functions {
+    string StatusBadge(ReadingStatus s) => s switch
+    {
+        ReadingStatus.Finished   => "bg-success",
+        ReadingStatus.Reading    => "bg-warning text-dark",
+        _                        => "bg-secondary"
+    };
+    string StatusLabel(ReadingStatus s) => s switch
+    {
+        ReadingStatus.Finished   => "Finished",
+        ReadingStatus.Reading    => "Reading",
+        _                        => "Want to Read"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">My Books</h1>
+    <a class="btn btn-primary" asp-action="Create">+ Add Book</a>
+</div>
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @msg
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-sm-6 col-md-5">
+        <input type="text" name="search" value="@ViewData["Search"]" class="form-control"
+               placeholder="Search by title, author, or genre…" />
+    </div>
+    <div class="col-sm-4 col-md-3">
+        <select name="status" class="form-select" asp-items="Html.GetEnumSelectList<ReadingStatus>()">
+            <option value="">All statuses</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">Filter</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No books match your search.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th class="text-end">Pages</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@book.Id" class="fw-semibold text-decoration-none">@book.Title</a>
+                        </td>
+                        <td>@book.Author</td>
+                        <td>@book.Genre</td>
+                        <td class="text-end">@book.Pages.ToString("N0")</td>
+                        <td><span class="badge @StatusBadge(book.Status)">@StatusLabel(book.Status)</span></td>
+                        <td>@(book.Rating > 0 ? new string('★', book.Rating) + new string('☆', 5 - book.Rating) : "—")</td>
+                        <td class="text-end text-nowrap">
+                            <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted small">@Model.Count() book(s).</p>
+}
