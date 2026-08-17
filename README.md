@@ -16,6 +16,18 @@ Add books to your shelf, track whether you want to read / are reading / have fin
 
 ---
 
+## Screenshots
+
+**Dashboard** — reading stats, a status breakdown chart, and recently added books:
+
+![Dashboard](docs/dashboard.png)
+
+**My Books** — the full library with search, status filtering, and inline actions:
+
+![My Books](docs/books.png)
+
+---
+
 ## Features
 
 | Feature | Details |
