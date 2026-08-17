@@ -1,0 +1,14 @@
+# Front-end libraries shipped with the ASP.NET Core template — not my code.
+wwwroot/lib/** linguist-vendored
+
+# Razor files are view templates; report them as Razor rather than plain HTML
+# so the repository is identified by its actual language (C#).
+*.cshtml linguist-language=HTML+Razor
+*.cshtml linguist-detectable=false
+
+# Keep line endings consistent across Windows/macOS/Linux checkouts.
+* text=auto
+*.cs   text diff=csharp
+*.cshtml text
+*.json text
+*.md   text
